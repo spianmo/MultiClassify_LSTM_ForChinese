@@ -43,7 +43,7 @@ if __name__ == '__main__':
     fw1.write("#" * 100 + '\n')
     for key in dataset.keys():
         for dataset_item in dataset[key]:
-            fw1.write("{},{}".format(key, dataset_item))
+            fw1.write("{}:{}".format(key, dataset_item))
     fw1.close()
 
     fw2 = open('weibo82813_7_classify.txt', "w", encoding="UTF-8")
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         if key == 'none':
             continue
         for dataset_item in dataset[key]:
-            fw2.write("{},{}".format(key, dataset_item))
+            fw2.write("{}:{}".format(key, dataset_item))
     fw2.close()
 
     print('done!')

@@ -1,6 +1,15 @@
 # LSTM中文文本进行情感多分类
 使用LSTM神经网络来对中文文本进行情感分类，包含八个类别（like, disgust, happiness, sadness, anger, surprise, fear, none）
 
+## 语料库
+
+![image-20211202100725237](http://oss.cache.ren/img/image-20211202100725237.png)
+
+![image-20211202100747826](http://oss.cache.ren/img/image-20211202100747826.png)
+
+![image-20211202101546695](http://oss.cache.ren/img/image-20211202101546695.png)
+
+![image-20211202101521766](http://oss.cache.ren/img/image-20211202101521766.png)
 
 ## 1 清洗数据
 **data/**
