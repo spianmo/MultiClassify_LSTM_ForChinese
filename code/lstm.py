@@ -16,6 +16,8 @@ def lstm(input_dim, embedding_weights, dense_num):
                         input_length=lstm_input))
     model.add(LSTM(256, activation='softsign'))
     model.add(Dropout(0.5))
+    # Dense=>全连接层,输出维度=情感分类的数量
     model.add(Dense(dense_num))
+    # Bi-LSTM
     model.add(Activation('softmax'))
     return model
