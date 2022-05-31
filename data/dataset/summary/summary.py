@@ -6,7 +6,6 @@ if __name__ == '__main__':
     dataset = {}
     file_list = ["emotion_corpus_microblog.txt", "Nlpcc2014Train.txt", "simplifyweibo_8_moods.txt", "simplifyweibo_5_moods.txt"]
     mood_list = ['anger', 'disgust', 'happiness', 'like', 'sadness', 'fear', 'surprise', 'none']
-    count = 0
 
     for mood in mood_list:
         dataset[mood] = []
@@ -20,7 +19,6 @@ if __name__ == '__main__':
                     # print("非法语句: " + items[1])
                     continue
                 dataset[items[0]].append(items[1])
-                count += 1
             f.close()
 
     count_dist = 0

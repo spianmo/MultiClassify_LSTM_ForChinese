@@ -20,12 +20,15 @@ if __name__ == '__main__':
         embedding_weights[i + 1, :] = model_word.wv[list(model_word.wv.key_to_index)[i]]
         w2dic[list(model_word.wv.key_to_index)[i]] = i + 1
 
-    model = load_model('../model/lstm_sentiment_classification_5_total.h5')
+    #model = load_model('../model/lstm_sentiment_classification_8_total.h5')
+    model = load_model('../model/simplifyweibo_5_moods.h5')
 
     pchinese = re.compile('([\u4e00-\u9fa5]+)+?')
 
-    label = {0: "生气", 1: "厌恶", 2: "快乐", 3: "喜爱", 4: "悲伤"}
-
+    # ['anger', 'disgust', 'happiness', 'like', 'sadness', 'fear', 'surprise']
+    label = {0: "生气", 1: "厌恶", 2: "快乐", 3: "喜爱", 4: "悲伤", 5: "恐惧", 6: "惊讶", 7: "中性"}
+    #label = {0: "生气", 1: "厌恶", 2: "快乐", 3: "喜爱", 4: "悲伤"}
+    print("请输入：")
     while True:
         in_str = input()
         in_stc = ''.join(pchinese.findall(in_str))

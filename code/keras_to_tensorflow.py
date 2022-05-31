@@ -32,4 +32,4 @@ def h5_to_pb(h5_model_name):
 
 
 if __name__ == '__main__':
-    h5_to_pb('lstm_sentiment_classification_7_total')
+    h5_to_pb('lstm_sentiment_classification_8_total')

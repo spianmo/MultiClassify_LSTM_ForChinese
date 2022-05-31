@@ -5,31 +5,33 @@ import warnings
 import numpy as np
 import tensorflow as tf
 import tensorflow.keras as keras
-from keras.callbacks import ModelCheckpoint, Callback
+from keras.callbacks import ModelCheckpoint, Callback, ReduceLROnPlateau
 from keras.utils.vis_utils import plot_model
 from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing import sequence
-from tensorflow.python.keras.callbacks import TensorBoard, EarlyStopping
+from tensorflow.python.keras.callbacks import TensorBoard
 
 from dataset import loadfile, clean_data
 from gen_dict import generate_dict
 from keras_to_tensorflow import h5_to_pb
-from lstm import lstm
+from lstm import bi_lstm, lstm
 from word2vec import word2vec_train
+
+warnings.filterwarnings("ignore")
 
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 tf.config.experimental.list_physical_devices('GPU')
-np.random.seed(512)
-random.seed(512)
-tf.random.set_seed(512)
+np.random.seed(500)
+random.seed(500)
+tf.random.set_seed(500)
 # 参数
 
 voc_dim = 150  # word的向量维度
 lstm_input = 150  # lstm输入维度
-epoch_time = 10  # epoch
-batch_size = 32  # batch
+epoch_time = 15  # epoch
+batch_size = 128  # batch
 
 
 def data2inx(w2indx, X_Vec):
@@ -83,13 +85,9 @@ class CustomEarlyStopping(Callback):
 
 
 def train_lstm(model, x_train, y_train, x_test, y_test, output_tag: str):
-    print('Compiling the Model...')
-    model.compile(loss='binary_crossentropy',  # hinge
-                  optimizer='adam', metrics=['mae', 'acc'])
-
     print("Train...")
     tbCallBack = TensorBoard(log_dir="../model/log", write_images=1, histogram_freq=1, write_grads=True)
-    history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epoch_time, validation_split=0.2,
+    history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epoch_time, validation_split=0.1,
                         verbose=1,
                         callbacks=[tbCallBack,
                                    ModelCheckpoint(filepath='../model/tmp/weights_{epoch:02d}-{val_loss:.4f}-{'
@@ -98,7 +96,8 @@ def train_lstm(model, x_train, y_train, x_test, y_test, output_tag: str):
                                                    save_weights_only=False,
                                                    mode='auto',
                                                    period=1),
-                                   CustomEarlyStopping(ratio=0.5, patience=2, verbose=1)
+                                   #CustomEarlyStopping(ratio=0.5, patience=2, verbose=1),
+                                   #ReduceLROnPlateau(monitor='val_loss', factor=0.1, min_lr=1e-8, patience=0, verbose=1)
                                    ]
                         )
 
@@ -124,21 +123,20 @@ def train_lstm(model, x_train, y_train, x_test, y_test, output_tag: str):
 
     print("Evaluate...")
     print(model.predict(x_test))
-    score = model.evaluate(x_test, y_test,
-                           batch_size=batch_size)
+    score = model.evaluate(x_test, y_test, batch_size=batch_size)
 
     json_string = model.to_json()
     with open('../model/' + output_tag + '.json', 'w') as outfile:
         outfile.write(json_string)
     model.save('../model/' + output_tag + '.h5')
     plot_model(model, to_file='../model/model.png')
-    print('Test score:', score)
+    print('Test Accuracy:{0:.2%}'.format(score[1]))
 
 
 if __name__ == '__main__':
     dataset_name = 'simplifyweibo_5_moods'
-    # mood_list = ['anger', 'disgust', 'happiness', 'like', 'sadness', 'fear', 'surprise']
-    mood_list = ['anger', 'disgust', 'happiness', 'like', 'sadness']
+    mood_list = ['anger', 'disgust', 'happiness', 'like', 'sadness', 'fear', 'surprise', 'none']
+    #mood_list = ['anger', 'disgust', 'happiness', 'like', 'sadness']
     print("开始清洗数据................")
     if not os.path.exists('../data/clean/'):
         os.makedirs('../data/clean/')
@@ -154,11 +152,11 @@ if __name__ == '__main__':
 
     index = data2inx(w2dic, X_Vec)
     index2 = sequence.pad_sequences(index, maxlen=voc_dim)
-    x_train, x_test, y_train, y_test = train_test_split(index2, y, test_size=0.2, shuffle=True)
+    x_train, x_test, y_train, y_test = train_test_split(index2, y, test_size=0.2, random_state=500)
     y_train = keras.utils.to_categorical(y_train, num_classes=len(mood_list))
     y_test = keras.utils.to_categorical(y_test, num_classes=len(mood_list))
 
-    model = lstm(input_dim, embedding_weights, len(mood_list))
+    model = bi_lstm(input_dim, embedding_weights, len(mood_list))
     train_lstm(model, x_train, y_train, x_test, y_test, dataset_name)
 
     h5_to_pb(dataset_name)
