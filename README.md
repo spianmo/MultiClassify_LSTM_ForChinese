@@ -1,5 +1,25 @@
-# LSTM中文文本情感多分类
-使用LSTM神经网络来对中文文本进行情感分类，包含八个类别（like, disgust, happiness, sadness, anger, surprise, fear, none）
+# Bi-LSTM中文文本情感多分类
+该子项目归属于TrackerDesktop IM舆情分析。使用Bi-LSTM神经网络来对中文文本进行情感分类，包含八个类别（like, disgust, happiness, sadness, anger, surprise, fear, none）。
+
+项目涉及的八分类情感语料库对应的文本标注工具及其后端:
+
+[SentimentMarkTool: 一个简易的基于Vuetify的八分类中文情绪标注工具 (github.com)](https://github.com/spianmo/SentimentMarkTool)
+
+[SentimentMarkServer: 八分类中文情绪标注工具后端，Springboot+MongoDB (github.com)](https://github.com/spianmo/SentimentMarkServer)
+
+**simplifyweibo_8_moods八分类多情感数据集**
+
+汇总emotion_corpus_microblog、simplifyweibo_5_moods、Nlpcc2014Train 的八分类情感分类数据集
+
+> total：83790 items
+> anger：6422
+> disgust：8149
+> happiness：12802
+> like：8947
+> sadness：16465
+> fear：952
+> surprise：1817
+> none：28236
 
 ## 语料库
 
