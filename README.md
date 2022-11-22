@@ -3,9 +3,9 @@
 
 项目涉及的八分类情感语料库对应的文本标注工具及其后端:
 
-[SentimentMarkTool: 一个简易的基于Vuetify的八分类中文情绪标注工具 (github.com)](https://github.com/spianmo/SentimentMarkTool)
+[SentimentMarkTool: 一个简易的基于Vuetify的八分类中文情绪标注工具](https://github.com/spianmo/SentimentMarkTool)
 
-[SentimentMarkServer: 八分类中文情绪标注工具后端，Springboot+MongoDB (github.com)](https://github.com/spianmo/SentimentMarkServer)
+[SentimentMarkServer: 八分类中文情绪标注工具后端](https://github.com/spianmo/SentimentMarkServer)
 
 **simplifyweibo_8_moods八分类多情感数据集**
 
